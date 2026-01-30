@@ -3,34 +3,58 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 
-const proxy = (target, prefix) =>
-  createProxyMiddleware({
-    target,
-    changeOrigin: true,
-    pathRewrite: { [`^${prefix}`]: "" },
-    onError(err, req, res) {
-      console.error(`Proxy error for ${prefix}:`, err.message);
-      res.status(502).send("Bad Gateway");
-    }
-  });
-
 /* ========== APIs ========== */
-app.use("/api/vaultapi", proxy(process.env.VAULT_API, "/api/vaultapi"));
-app.use("/api/bitcoinapi", proxy(process.env.BITCOIN_API, "/api/bitcoinapi"));
-app.use("/api/cardanoapi", proxy(process.env.CARDANO_API, "/api/cardanoapi"));
-app.use("/api/coinapi", proxy(process.env.COIN_API, "/api/coinapi"));
-app.use("/api/dexwallet", proxy(process.env.DEXWALLET_API, "/api/dexwallet"));
-app.use("/api/solanaapi", proxy(process.env.SOLANA_API, "/api/solanaapi"));
-app.use("/api/vaultswap", proxy(process.env.SOLANA_API, "/api/vaultswap"));
-app.use("/api/wallethistory", proxy(process.env.SOLANA_API, "/api/wallethistory"));
+app.use("/api/vaultapi", createProxyMiddleware({
+  target: "https://api-auth.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/bitcoinapi", createProxyMiddleware({
+  target: "https://api-user.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/cardanoapi", createProxyMiddleware({
+  target: "https://api-order.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/coinapi", createProxyMiddleware({
+  target: "https://api-report.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/dexwallet", createProxyMiddleware({
+  target: "https://api-billing.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/solanaapi", createProxyMiddleware({
+  target: "https://api-notify.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/vaultswap", createProxyMiddleware({
+  target: "https://api-notify.onrender.com",
+  changeOrigin: true,
+}));
+
+app.use("/api/wallethistory", createProxyMiddleware({
+  target: "https://api-notify.onrender.com",
+  changeOrigin: true,
+}));
 
 /* ========== UI ========== */
-app.use("/admin", proxy(process.env.UI_ADMIN, "/admin"));
-app.use("/", proxy(process.env.UI_MAIN, "/"));
+app.use("/admin", createProxyMiddleware({
+  target: "https://ui-admin.onrender.com",
+  changeOrigin: true,
+}));
 
-app.get("/health", (_, res) => res.send("OK"));
+app.use("/", createProxyMiddleware({
+  target: "https://ui-main.onrender.com",
+  changeOrigin: true,
+}));
 
 app.listen(process.env.PORT, () => {
   console.log("Gateway running");
 });
-
