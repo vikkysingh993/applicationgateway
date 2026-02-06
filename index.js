@@ -24,10 +24,16 @@ app.use("/api/coinapi", createProxyMiddleware({
   changeOrigin: true,
 }));
 
-app.use("/api/dexwallet", createProxyMiddleware({
-  target: "https://dexwallet-8sd1.onrender.com",
-  changeOrigin: true,
-}));
+app.use(
+  "/api/dexwallet",
+  createProxyMiddleware({
+    target: "https://dexwallet-8sd1.onrender.com",
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/dexwallet": ""
+    }
+  })
+);
 
 app.use("/api/solanaapi", createProxyMiddleware({
   target: "https://api-notify.onrender.com",
