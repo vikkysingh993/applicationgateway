@@ -56,6 +56,17 @@ app.use("/api/wallethistory", createProxyMiddleware({
   changeOrigin: true,
 }));
 
+app.use(
+  "/api/wallethistory",
+  createProxyMiddleware({
+    target: "https://walletandcoinhistory.onrender.com",
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/wallethistory": ""
+    }
+  })
+);
+
 /* ========== UI ========== */
 app.use("/admin", createProxyMiddleware({
   target: "https://ui-admin.onrender.com",
