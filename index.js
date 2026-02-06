@@ -51,10 +51,6 @@ app.use(
   })
 );
 
-app.use("/api/wallethistory", createProxyMiddleware({
-  target: "https://api-notify.onrender.com",
-  changeOrigin: true,
-}));
 
 app.use(
   "/api/wallethistory",
