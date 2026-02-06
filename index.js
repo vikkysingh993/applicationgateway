@@ -40,12 +40,16 @@ app.use("/api/solanaapi", createProxyMiddleware({
   changeOrigin: true,
 }));
 
-app.use("/api/vaultswap", createProxyMiddleware({
+app.use(
+  "/api/vaultswap",
+  createProxyMiddleware({
     target: "https://vaultswap.onrender.com",
     changeOrigin: true,
     pathRewrite: {
       "^/api/vaultswap": ""
-}));
+    }
+  })
+);
 
 app.use("/api/wallethistory", createProxyMiddleware({
   target: "https://api-notify.onrender.com",
