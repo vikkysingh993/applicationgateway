@@ -25,7 +25,7 @@ app.use("/api/coinapi", createProxyMiddleware({
 }));
 
 app.use("/api/dexwallet", createProxyMiddleware({
-  target: "https://api-billing.onrender.com",
+  target: "https://dexwallet-8sd1.onrender.com",
   changeOrigin: true,
 }));
 
