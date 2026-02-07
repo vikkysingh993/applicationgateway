@@ -4,10 +4,16 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
 /* ========== APIs ========== */
-app.use("/api/vaultapi", createProxyMiddleware({
-  target: "https://api-auth.onrender.com",
-  changeOrigin: true,
-}));
+app.use(
+  "/api/vaultapi",
+  createProxyMiddleware({
+    target: "https://vaultapi.onrender.com",
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/vaultapi": ""
+    }
+  })
+);
 
 app.use("/api/bitcoinapi", createProxyMiddleware({
   target: "https://api-user.onrender.com",
