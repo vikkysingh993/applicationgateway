@@ -70,7 +70,7 @@ app.use("/admin", createProxyMiddleware({
 }));
 
 app.use("/", createProxyMiddleware({
-  target: "https://ui-main.onrender.com",
+  target: "https://vaultapp-74ys.onrender.com",
   changeOrigin: true,
 }));
 
