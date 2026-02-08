@@ -71,7 +71,7 @@ app.use(
 
 /* ========== UI ========== */
 app.use("/admin", createProxyMiddleware({
-  target: "https://ui-admin.onrender.com",
+  target: "https://vaultadmin-ep4d.onrender.com",
   changeOrigin: true,
 }));
 
