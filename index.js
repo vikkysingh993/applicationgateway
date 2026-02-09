@@ -77,6 +77,12 @@ app.use(
     changeOrigin: true,
     pathRewrite: {
       "^/admin": ""
+    },
+    onProxyReq(proxyReq, req) {
+      // Force SPA index.html
+      if (req.originalUrl === "/admin" || req.originalUrl === "/admin/") {
+        proxyReq.path = "/";
+      }
     }
   })
 );
