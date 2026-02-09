@@ -70,10 +70,16 @@ app.use(
 );
 
 /* ========== UI ========== */
-app.use("/admin", createProxyMiddleware({
-  target: "https://vaultadmin-ep4d.onrender.com",
-  changeOrigin: true,
-}));
+app.use(
+  "/admin",
+  createProxyMiddleware({
+    target: "https://vaultadmin-ep4d.onrender.com",
+    changeOrigin: true,
+    pathRewrite: {
+      "^/admin": ""
+    }
+  })
+);
 
 app.use("/", createProxyMiddleware({
   target: "https://vaultapp-74ys.onrender.com",
