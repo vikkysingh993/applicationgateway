@@ -70,34 +70,35 @@ app.use(
 );
 
 /* ========== UI ========== */
+app.use("/admin", (req, res, next) => {
+  // If request is NOT for a static asset
+  if (
+    !req.path.startsWith("/assets") &&
+    !req.path.includes(".")
+  ) {
+    req.url = "/"; // force index.html
+  }
+  next();
+});
+
 app.use(
   "/admin",
   createProxyMiddleware({
     target: "https://vaultadmin-ep4d.onrender.com",
     changeOrigin: true,
-    pathRewrite: {
-      "^/admin": ""
-    },
-    onProxyReq(proxyReq, req) {
-      // If user hits /admin or /admin/
-      if (req.originalUrl === "/admin" || req.originalUrl === "/admin/") {
-        proxyReq.path = "/";
-      }
-    }
+    pathRewrite: { "^/admin": "" }
   })
 );
 
-app.use("/", createProxyMiddleware({
-  target: "https://vaultapp-74ys.onrender.com",
-  changeOrigin: true,
-}));
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: "https://vaultapp-74ys.onrender.com",
+    changeOrigin: true
+  })
+);
 
-/* ========== SPA FALLBACK (VERY IMPORTANT) ========== */
-/* This MUST be the LAST middleware */
-app.use((req, res) => {
-  // Any unknown route → load SPA
-  res.redirect("/");
-});
+
 
 app.listen(process.env.PORT, () => {
   console.log("Gateway running");
