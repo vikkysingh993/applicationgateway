@@ -79,7 +79,7 @@ app.use(
       "^/admin": ""
     },
     onProxyReq(proxyReq, req) {
-      // Force SPA index.html
+      // If user hits /admin or /admin/
       if (req.originalUrl === "/admin" || req.originalUrl === "/admin/") {
         proxyReq.path = "/";
       }
@@ -91,6 +91,13 @@ app.use("/", createProxyMiddleware({
   target: "https://vaultapp-74ys.onrender.com",
   changeOrigin: true,
 }));
+
+/* ========== SPA FALLBACK (VERY IMPORTANT) ========== */
+/* This MUST be the LAST middleware */
+app.use((req, res) => {
+  // Any unknown route → load SPA
+  res.redirect("/");
+});
 
 app.listen(process.env.PORT, () => {
   console.log("Gateway running");
