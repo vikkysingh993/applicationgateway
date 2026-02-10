@@ -70,25 +70,25 @@ app.use(
 );
 
 /* ========== UI ========== */
-app.use("/admin", (req, res, next) => {
-  // If request is NOT for a static asset
-  if (
-    !req.path.startsWith("/assets") &&
-    !req.path.includes(".")
-  ) {
-    req.url = "/"; // force index.html
-  }
-  next();
-});
-
 app.use(
   "/admin",
   createProxyMiddleware({
     target: "https://vaultadmin-ep4d.onrender.com",
     changeOrigin: true,
-    pathRewrite: { "^/admin": "" }
+    pathRewrite: (path, req) => {
+      // Remove /admin prefix
+      const newPath = path.replace(/^\/admin/, "");
+
+      // If it's a route (not asset), force SPA
+      if (!newPath.startsWith("/assets") && !newPath.includes(".")) {
+        return "/";
+      }
+
+      return newPath;
+    }
   })
 );
+
 
 app.use(
   "/",
